@@ -151,7 +151,7 @@ export function RoutineFormPage() {
             value={routineName}
             onChange={(e) => setRoutineName(e.target.value)}
             placeholder="e.g. Arm day"
-            className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-base text-white placeholder:text-slate-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+            className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-base text-white placeholder:text-slate-600 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
             required
           />
         </div>
@@ -162,7 +162,7 @@ export function RoutineFormPage() {
             <button
               type="button"
               onClick={addRow}
-              className="rounded-lg bg-slate-800 px-3 py-1.5 text-sm font-medium text-emerald-400 hover:bg-slate-700"
+              className="rounded-lg bg-slate-800 px-3 py-1.5 text-sm font-medium text-orange-400 hover:bg-slate-700"
             >
               Add exercise
             </button>
@@ -209,7 +209,7 @@ export function RoutineFormPage() {
                       value={row.name}
                       onChange={(e) => updateRow(index, { name: e.target.value })}
                       placeholder="Bench press"
-                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2.5 text-base text-white placeholder:text-slate-600 focus:border-emerald-500 focus:outline-none"
+                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2.5 text-base text-white placeholder:text-slate-600 focus:border-orange-500 focus:outline-none"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -222,7 +222,7 @@ export function RoutineFormPage() {
                         onChange={(e) =>
                           updateRow(index, { targetSets: Number(e.target.value) || 1 })
                         }
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2.5 text-base text-white focus:border-emerald-500 focus:outline-none"
+                        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2.5 text-base text-white focus:border-orange-500 focus:outline-none"
                       />
                     </div>
                     <div>
@@ -234,7 +234,7 @@ export function RoutineFormPage() {
                         onChange={(e) =>
                           updateRow(index, { targetReps: Number(e.target.value) || 1 })
                         }
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2.5 text-base text-white focus:border-emerald-500 focus:outline-none"
+                        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2.5 text-base text-white focus:border-orange-500 focus:outline-none"
                       />
                     </div>
                   </div>
@@ -253,7 +253,7 @@ export function RoutineFormPage() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <button
             type="submit"
-            className="rounded-xl bg-emerald-500 px-5 py-3 text-base font-semibold text-slate-950 hover:bg-emerald-400"
+            className="rounded-xl bg-orange-500 px-5 py-3 text-base font-semibold text-slate-950 hover:bg-orange-400"
           >
             Save routine
           </button>

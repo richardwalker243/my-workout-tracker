@@ -11,7 +11,7 @@ export function RoutinesPage() {
         <p className="text-sm text-slate-400">Templates for gym sessions</p>
         <Link
           to="/routines/new"
-          className="rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-slate-950 hover:bg-emerald-400 active:scale-[0.98]"
+          className="rounded-xl bg-orange-500 px-4 py-2.5 text-sm font-semibold text-slate-950 hover:bg-orange-400 active:scale-[0.98]"
         >
           New routine
         </Link>

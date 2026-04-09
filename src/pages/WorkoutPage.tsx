@@ -63,7 +63,7 @@ export function WorkoutPage() {
                       onChange={(e) =>
                         updateActiveEntry(index, { completed: e.target.checked })
                       }
-                      className="h-5 w-5 rounded border-slate-600 bg-slate-950 text-emerald-500 focus:ring-emerald-500"
+                      className="h-5 w-5 rounded border-slate-600 bg-slate-950 text-orange-500 focus:ring-orange-500"
                     />
                     Done
                   </label>
@@ -92,7 +92,7 @@ export function WorkoutPage() {
                           sessionMaxWeight: v === "" ? null : Number(v),
                         });
                       }}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2.5 text-base text-white focus:border-emerald-500 focus:outline-none"
+                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2.5 text-base text-white focus:border-orange-500 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -119,7 +119,7 @@ export function WorkoutPage() {
               onClick={() => {
                 finishWorkout();
               }}
-              className="flex-1 rounded-xl bg-emerald-500 px-4 py-3 text-base font-semibold text-slate-950 hover:bg-emerald-400"
+              className="flex-1 rounded-xl bg-orange-500 px-4 py-3 text-base font-semibold text-slate-950 hover:bg-orange-400"
             >
               Finish & save workout
             </button>
@@ -138,7 +138,7 @@ export function WorkoutPage() {
           <p className="mb-3">Create a routine first.</p>
           <Link
             to="/routines/new"
-            className="font-medium text-emerald-400 hover:text-emerald-300"
+            className="font-medium text-orange-400 hover:text-orange-300"
           >
             New routine
           </Link>
@@ -150,10 +150,10 @@ export function WorkoutPage() {
               <button
                 type="button"
                 onClick={() => startWorkout(r)}
-                className="flex w-full items-center justify-between rounded-2xl border border-slate-800 bg-slate-900/60 px-4 py-4 text-left transition-colors hover:border-emerald-900/50 hover:bg-slate-900"
+                className="flex w-full items-center justify-between rounded-2xl border border-slate-800 bg-slate-900/60 px-4 py-4 text-left transition-colors hover:border-orange-900/50 hover:bg-slate-900"
               >
                 <span className="font-medium text-white">{r.name}</span>
-                <span className="text-sm text-emerald-500">Start</span>
+                <span className="text-sm text-orange-500">Start</span>
               </button>
             </li>
           ))}
