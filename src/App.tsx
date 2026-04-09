@@ -11,7 +11,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<Navigate to="/routines" replace />} />
+        <Route index element={<Navigate to="/workout" replace />} />
         <Route path="routines" element={<RoutinesPage />} />
         <Route path="routines/new" element={<RoutineFormPage />} />
         <Route path="routines/:id" element={<RoutineFormPage />} />
