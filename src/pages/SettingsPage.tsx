@@ -30,7 +30,7 @@ export function SettingsPage() {
               className={[
                 "rounded-xl px-5 py-2.5 text-sm font-semibold capitalize transition-colors",
                 data.weightUnit === u
-                  ? "bg-emerald-500 text-slate-950"
+                  ? "bg-orange-500 text-slate-950"
                   : "border border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-600",
               ].join(" ")}
             >

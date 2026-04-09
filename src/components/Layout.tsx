@@ -21,7 +21,7 @@ export function Layout() {
     <div className="flex min-h-dvh flex-col pb-[calc(4.5rem+env(safe-area-inset-bottom))]">
       <header className="sticky top-0 z-10 border-b border-slate-800 bg-slate-950/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-slate-950/80">
         <div className="mx-auto flex max-w-lg items-center justify-between gap-3">
-          <h1 className="text-lg font-semibold tracking-tight text-white">Workout Tracker</h1>
+          <h1 className="text-lg font-semibold tracking-tight text-white">Let&apos;s werk aaht 👅💦💪</h1>
           <NavLink
             to="/settings"
             className="rounded-lg px-2 py-1 text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-200"
@@ -45,7 +45,7 @@ export function Layout() {
                 className={({ isActive }) =>
                   [
                     "flex min-h-14 min-w-[4.5rem] flex-1 flex-col items-center justify-center text-xs font-medium transition-colors",
-                    isActive ? "text-emerald-400" : "text-slate-500 hover:text-slate-300",
+                    isActive ? "text-orange-400" : "text-slate-500 hover:text-slate-300",
                   ].join(" ")
                 }
               >

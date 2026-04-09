@@ -58,8 +58,8 @@ export function ExerciseProgressPage() {
         {
           label: `Max (${data.weightUnit})`,
           data: chartPoints.map((o) => o.sessionMaxWeight as number),
-          borderColor: "rgb(52, 211, 153)",
-          backgroundColor: "rgba(52, 211, 153, 0.15)",
+          borderColor: "rgb(249, 115, 22)",
+          backgroundColor: "rgba(249, 115, 22, 0.15)",
           tension: 0.25,
           fill: true,
           pointRadius: 4,
@@ -122,7 +122,7 @@ export function ExerciseProgressPage() {
             <select
               value={exerciseId ?? ""}
               onChange={(e) => setExerciseId(e.target.value || null)}
-              className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-base text-white focus:border-emerald-500 focus:outline-none"
+              className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-base text-white focus:border-orange-500 focus:outline-none"
             >
               <option value="">Select…</option>
               {exercisesSorted.map((ex) => (

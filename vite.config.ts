@@ -12,8 +12,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.svg"],
       manifest: {
-        name: "Workout Tracker",
-        short_name: "Workouts",
+        name: "Let's werk aaht 👅💦💪",
+        short_name: "Werk aaht",
         description: "Track routines and gym sessions on your phone",
         theme_color: "#0f172a",
         background_color: "#0f172a",
