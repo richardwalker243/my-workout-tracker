@@ -12,7 +12,7 @@ export function SettingsPage() {
   return (
     <div className="space-y-6">
       <Link
-        to="/routines"
+        to="/workout"
         className="inline-block rounded-lg px-2 py-1 text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-200"
       >
         Back

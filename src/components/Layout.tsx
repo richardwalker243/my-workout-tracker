@@ -2,8 +2,8 @@ import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAppState } from "@/state";
 
 const tabs = [
-  { to: "/routines", label: "Routines" },
   { to: "/workout", label: "Workout" },
+  { to: "/routines", label: "Routines" },
   { to: "/history", label: "History" },
   { to: "/exercises", label: "Exercises" },
 ] as const;
