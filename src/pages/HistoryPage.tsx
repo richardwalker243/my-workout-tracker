@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { ActivityHeatmap } from "@/components/ActivityHeatmap";
 import { workoutSummary } from "@/lib/workoutStats";
 import { useAppState } from "@/state";
 import type { CompletedWorkout } from "@/types";
@@ -31,8 +32,10 @@ export function HistoryPage() {
   );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <p className="text-sm text-slate-400">Completed workouts on this device</p>
+
+      {sorted.length > 0 && <ActivityHeatmap workouts={data.workouts} />}
 
       {sorted.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/40 px-4 py-10 text-center text-slate-500">
