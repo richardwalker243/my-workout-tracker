@@ -52,25 +52,19 @@ export function earliestWorkoutDate(workouts: CompletedWorkout[]): Date | null {
 }
 
 /**
- * Mondays from current week back through the week containing `earliest`,
- * newest first (index 0 = this week).
+ * Mondays from the week containing `earliest` through current week,
+ * oldest first (index 0 = earliest week).
  */
-export function weekMondaysNewestFirst(earliest: Date, now: Date = new Date()): Date[] {
+export function weekMondaysChronological(earliest: Date, now: Date = new Date()): Date[] {
   const currentMonday = mondayOfWeek(now);
   const earliestMonday = mondayOfWeek(earliest);
   const list: Date[] = [];
   for (
-    let w = new Date(currentMonday);
-    w.getTime() >= earliestMonday.getTime();
-    w.setDate(w.getDate() - 7)
+    let w = new Date(earliestMonday);
+    w.getTime() <= currentMonday.getTime();
+    w.setDate(w.getDate() + 7)
   ) {
     list.push(new Date(w));
   }
   return list;
-}
-
-export function formatWeekRangeShort(monday: Date): string {
-  const sunday = addDays(monday, 6);
-  const opts: Intl.DateTimeFormatOptions = { day: "numeric", month: "short" };
-  return `${monday.toLocaleDateString(undefined, opts)} – ${sunday.toLocaleDateString(undefined, opts)}`;
 }
