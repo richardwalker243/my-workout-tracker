@@ -61,11 +61,11 @@ export function ActivityHeatmap({ workouts }: Props) {
     <section className="space-y-3" aria-label="Workout activity by week">
       <h2 className="text-sm font-medium text-slate-300">Activity calendar</h2>
 
-      <div className="grid grid-cols-7 gap-x-2 gap-y-1">
+      <div className="grid grid-cols-7 gap-[10px]">
         {WEEKDAY_LABELS.map((c, i) => (
           <div
             key={`h-${i}`}
-            className="flex justify-center text-[9px] font-medium uppercase tracking-wide text-slate-500"
+            className="text-center text-[9px] font-medium uppercase tracking-wide text-slate-500"
             aria-hidden
           >
             {c}
@@ -77,7 +77,7 @@ export function ActivityHeatmap({ workouts }: Props) {
         {monthGroups.map((group) => (
           <div key={group.key}>
             <h3 className="mb-2 text-xs font-medium text-slate-400">{group.label}</h3>
-            <div className="grid grid-cols-7 gap-x-2 gap-y-2">
+            <div className="grid grid-cols-7 gap-[10px]">
               {group.mondays.flatMap((monday) =>
                 Array.from({ length: 7 }, (_, i) => {
                   const day = addDays(monday, i);
@@ -102,17 +102,16 @@ export function ActivityHeatmap({ workouts }: Props) {
                           : `${label} · no workout`;
 
                   return (
-                    <div key={dateKey} className="flex items-center justify-center">
-                      <div
-                        title={title}
-                        tabIndex={0}
-                        className={[
-                          "size-3 shrink-0 rounded-sm outline-none transition-colors sm:size-3.5",
-                          "hover:ring-1 hover:ring-slate-500 focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-950",
-                          active ? "bg-orange-500" : "bg-slate-800/90 ring-1 ring-slate-800/80",
-                        ].join(" ")}
-                      />
-                    </div>
+                    <div
+                      key={dateKey}
+                      title={title}
+                      tabIndex={0}
+                      className={[
+                        "aspect-square w-full min-h-0 rounded-md outline-none transition-colors",
+                        "hover:ring-1 hover:ring-slate-500 focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950",
+                        active ? "bg-orange-500" : "bg-slate-800/90 ring-1 ring-slate-800/80",
+                      ].join(" ")}
+                    />
                   );
                 }),
               )}
