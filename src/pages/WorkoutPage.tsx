@@ -17,6 +17,20 @@ function formatWhen(iso: string) {
   }
 }
 
+/** Date-only line for “last workout on …” (no time of day). */
+function formatCompletionDate(iso: string) {
+  try {
+    return new Date(iso).toLocaleDateString(undefined, {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  } catch {
+    return iso;
+  }
+}
+
 export function WorkoutPage() {
   const { data, startWorkout, updateActiveEntry, finishWorkout, discardActiveWorkout } =
     useAppState();
@@ -25,6 +39,13 @@ export function WorkoutPage() {
     () => [...data.routines].sort((a, b) => a.name.localeCompare(b.name)),
     [data.routines],
   );
+
+  const lastCompleted = useMemo(() => {
+    if (data.workouts.length === 0) return null;
+    return [...data.workouts].sort(
+      (a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime(),
+    )[0];
+  }, [data.workouts]);
 
   const active = data.activeWorkout;
 
@@ -132,6 +153,19 @@ export function WorkoutPage() {
   return (
     <div className="space-y-4">
       <p className="text-sm text-slate-400">Pick a routine and log max weight as you go.</p>
+
+      {lastCompleted ? (
+        <p className="rounded-xl border border-slate-800/80 bg-slate-900/40 px-3 py-2.5 text-sm text-slate-400">
+          <span className="text-slate-500">Last workout: </span>
+          <span className="font-medium text-slate-200">{lastCompleted.routineNameSnapshot}</span>
+          <span className="text-slate-500"> on </span>
+          <span className="text-slate-300">{formatCompletionDate(lastCompleted.completedAt)}</span>
+        </p>
+      ) : (
+        <p className="text-sm text-slate-600">
+          No completed workouts yet — finish a session and it will show here.
+        </p>
+      )}
 
       {sortedRoutines.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/40 px-4 py-8 text-center text-slate-500">
