@@ -1,23 +1,29 @@
 import type { CompletedWorkout } from "@/types";
 
-/** Latest session max weight for an exercise before `beforeIso` (exclusive), scanning completed workouts newest-first. */
-export function lastMaxWeightForExercise(
+/**
+ * Up to `limit` prior session max weights for an exercise before `beforeIso` (exclusive).
+ * Returned oldest → newest so the row reads chronologically.
+ */
+export function recentMaxWeightsForExercise(
   exerciseId: string,
   workouts: CompletedWorkout[],
   beforeIso: string,
-): number | null {
+  limit = 5,
+): number[] {
   const sorted = [...workouts].sort(
     (a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime(),
   );
   const cutoff = new Date(beforeIso).getTime();
+  const newestFirst: number[] = [];
   for (const w of sorted) {
     if (new Date(w.completedAt).getTime() >= cutoff) continue;
     const entry = w.entries.find((e) => e.exerciseId === exerciseId);
     if (entry && entry.sessionMaxWeight != null) {
-      return entry.sessionMaxWeight;
+      newestFirst.push(entry.sessionMaxWeight);
+      if (newestFirst.length >= limit) break;
     }
   }
-  return null;
+  return newestFirst.reverse();
 }
 
 export type ExerciseOccurrence = {

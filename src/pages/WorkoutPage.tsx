@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { lastMaxWeightForExercise } from "@/lib/workoutStats";
+import { recentMaxWeightsForExercise } from "@/lib/workoutStats";
 import { useAppState } from "@/state";
 
 function formatWhen(iso: string) {
@@ -60,7 +60,7 @@ export function WorkoutPage() {
 
         <ul className="space-y-3">
           {active.entries.map((entry, index) => {
-            const lastMax = lastMaxWeightForExercise(
+            const lastMaxes = recentMaxWeightsForExercise(
               entry.exerciseId,
               data.workouts,
               active.startedAt,
@@ -91,10 +91,16 @@ export function WorkoutPage() {
                 </div>
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   <div className="rounded-xl bg-slate-950/80 px-3 py-2">
-                    <p className="text-xs text-slate-500">Last time max ({data.weightUnit})</p>
-                    <p className="text-lg font-medium text-slate-200">
-                      {lastMax != null ? lastMax : "—"}
-                    </p>
+                    <p className="text-xs text-slate-500">Last maxes ({data.weightUnit})</p>
+                    {lastMaxes.length > 0 ? (
+                      <p className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5 text-lg font-medium text-slate-200">
+                        {lastMaxes.map((weight, i) => (
+                          <span key={`${weight}-${i}`}>{weight}</span>
+                        ))}
+                      </p>
+                    ) : (
+                      <p className="text-lg font-medium text-slate-200">—</p>
+                    )}
                   </div>
                   <div>
                     <label className="mb-1 block text-xs text-slate-500">
