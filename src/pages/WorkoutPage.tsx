@@ -93,10 +93,22 @@ export function WorkoutPage() {
                   <div className="rounded-xl bg-slate-950/80 px-3 py-2">
                     <p className="text-xs text-slate-500">Last maxes ({data.weightUnit})</p>
                     {lastMaxes.length > 0 ? (
-                      <p className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5 text-lg font-medium text-slate-200">
-                        {lastMaxes.map((weight, i) => (
-                          <span key={`${weight}-${i}`}>{weight}</span>
-                        ))}
+                      <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-lg font-medium text-slate-200">
+                        {lastMaxes.map((weight, i) => {
+                          const isLatest = i === lastMaxes.length - 1;
+                          return (
+                            <span key={`${weight}-${i}`} className="inline-flex items-baseline gap-x-2">
+                              {i > 0 && (
+                                <span className="font-normal text-slate-600" aria-hidden="true">
+                                  |
+                                </span>
+                              )}
+                              <span className={isLatest ? "font-bold text-white" : undefined}>
+                                {weight}
+                              </span>
+                            </span>
+                          );
+                        })}
                       </p>
                     ) : (
                       <p className="text-lg font-medium text-slate-200">—</p>
