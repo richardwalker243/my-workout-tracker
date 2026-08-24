@@ -1,7 +1,10 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { CopySummaryButton } from "@/components/CopySummaryButton";
+import { formatWorkoutShareText } from "@/lib/workoutShareText";
 import { recentMaxWeightsForExercise } from "@/lib/workoutStats";
 import { useAppState } from "@/state";
+import type { CompletedWorkout } from "@/types";
 
 function formatWhen(iso: string) {
   try {
@@ -34,6 +37,7 @@ function formatCompletionDate(iso: string) {
 export function WorkoutPage() {
   const { data, startWorkout, updateActiveEntry, finishWorkout, discardActiveWorkout } =
     useAppState();
+  const [savedWorkout, setSavedWorkout] = useState<CompletedWorkout | null>(null);
 
   const sortedRoutines = useMemo(
     () => [...data.routines].sort((a, b) => a.name.localeCompare(b.name)),
@@ -156,7 +160,8 @@ export function WorkoutPage() {
             <button
               type="button"
               onClick={() => {
-                finishWorkout();
+                const completed = finishWorkout();
+                if (completed) setSavedWorkout(completed);
               }}
               className="flex-1 rounded-xl bg-orange-500 px-4 py-3 text-base font-semibold text-slate-950 hover:bg-orange-400"
             >
@@ -210,6 +215,44 @@ export function WorkoutPage() {
             </li>
           ))}
         </ul>
+      )}
+
+      {savedWorkout && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-4 sm:items-center"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="saved-workout-title"
+          onClick={() => setSavedWorkout(null)}
+        >
+          <div
+            className="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-950 p-5 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 id="saved-workout-title" className="text-lg font-semibold text-white">
+              Workout saved
+            </h2>
+            <p className="mt-1 text-sm text-slate-500">{savedWorkout.routineNameSnapshot}</p>
+            <pre className="mt-4 max-h-48 overflow-y-auto whitespace-pre-wrap rounded-xl border border-slate-800 bg-slate-900/60 px-3 py-3 font-sans text-sm text-slate-300">
+              {formatWorkoutShareText(savedWorkout, data.weightUnit)}
+            </pre>
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+              <CopySummaryButton
+                workout={savedWorkout}
+                weightUnit={data.weightUnit}
+                size="lg"
+                className="w-full sm:w-auto"
+              />
+              <button
+                type="button"
+                onClick={() => setSavedWorkout(null)}
+                className="w-full rounded-xl bg-slate-800 px-4 py-3 text-sm font-medium text-white hover:bg-slate-700 sm:w-auto sm:flex-1"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
