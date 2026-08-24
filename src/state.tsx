@@ -26,7 +26,7 @@ type Action =
   | { type: "ensureExercises"; exercises: Exercise[] }
   | { type: "startWorkout"; routine: Routine; exerciseNames: Map<string, string> }
   | { type: "updateActiveEntry"; index: number; patch: Partial<WorkoutEntry> }
-  | { type: "finishWorkout" }
+  | { type: "finishWorkout"; completed: CompletedWorkout }
   | { type: "discardActiveWorkout" }
   | { type: "setWeightUnit"; unit: WeightUnit };
 
@@ -78,16 +78,9 @@ function reducer(state: AppData, action: Action): AppData {
     }
     case "finishWorkout": {
       if (!state.activeWorkout) return state;
-      const completed: CompletedWorkout = {
-        id: newId(),
-        completedAt: new Date().toISOString(),
-        routineId: state.activeWorkout.routineId,
-        routineNameSnapshot: state.activeWorkout.routineNameSnapshot,
-        entries: state.activeWorkout.entries.map((e) => ({ ...e })),
-      };
       return {
         ...state,
-        workouts: [...state.workouts, completed],
+        workouts: [...state.workouts, action.completed],
         activeWorkout: null,
       };
     }
@@ -106,7 +99,7 @@ type Ctx = {
   deleteRoutine: (id: string) => void;
   startWorkout: (routine: Routine) => void;
   updateActiveEntry: (index: number, patch: Partial<WorkoutEntry>) => void;
-  finishWorkout: () => void;
+  finishWorkout: () => CompletedWorkout | null;
   discardActiveWorkout: () => void;
   setWeightUnit: (unit: WeightUnit) => void;
   exerciseNameById: (id: string) => string | undefined;
@@ -152,9 +145,18 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     dispatch({ type: "updateActiveEntry", index, patch });
   }, []);
 
-  const finishWorkout = useCallback(() => {
-    dispatch({ type: "finishWorkout" });
-  }, []);
+  const finishWorkout = useCallback((): CompletedWorkout | null => {
+    if (!data.activeWorkout) return null;
+    const completed: CompletedWorkout = {
+      id: newId(),
+      completedAt: new Date().toISOString(),
+      routineId: data.activeWorkout.routineId,
+      routineNameSnapshot: data.activeWorkout.routineNameSnapshot,
+      entries: data.activeWorkout.entries.map((e) => ({ ...e })),
+    };
+    dispatch({ type: "finishWorkout", completed });
+    return completed;
+  }, [data.activeWorkout]);
 
   const discardActiveWorkout = useCallback(() => {
     dispatch({ type: "discardActiveWorkout" });

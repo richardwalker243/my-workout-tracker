@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { ActivityHeatmap } from "@/components/ActivityHeatmap";
+import { CopySummaryButton } from "@/components/CopySummaryButton";
 import { workoutSummary } from "@/lib/workoutStats";
 import { useAppState } from "@/state";
 import type { CompletedWorkout } from "@/types";
@@ -71,10 +72,15 @@ export function HistoryPage() {
             className="max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-slate-800 bg-slate-950 p-5 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 id="history-dialog-title" className="text-lg font-semibold text-white">
-              {selected.routineNameSnapshot}
-            </h2>
-            <p className="mt-1 text-sm text-slate-500">{formatWhen(selected.completedAt)}</p>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h2 id="history-dialog-title" className="text-lg font-semibold text-white">
+                  {selected.routineNameSnapshot}
+                </h2>
+                <p className="mt-1 text-sm text-slate-500">{formatWhen(selected.completedAt)}</p>
+              </div>
+              <CopySummaryButton workout={selected} weightUnit={data.weightUnit} />
+            </div>
             <ul className="mt-4 space-y-3">
               {selected.entries.map((e, i) => (
                 <li
