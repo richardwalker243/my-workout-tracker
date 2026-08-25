@@ -1,3 +1,4 @@
+import { entryHasWeight, entrySessionMaxWeight } from "@/lib/workoutEntry";
 import type { CompletedWorkout } from "@/types";
 
 /**
@@ -18,8 +19,10 @@ export function recentMaxWeightsForExercise(
   for (const w of sorted) {
     if (new Date(w.completedAt).getTime() >= cutoff) continue;
     const entry = w.entries.find((e) => e.exerciseId === exerciseId);
-    if (entry && entry.sessionMaxWeight != null) {
-      newestFirst.push(entry.sessionMaxWeight);
+    if (!entry) continue;
+    const max = entrySessionMaxWeight(entry);
+    if (max != null) {
+      newestFirst.push(max);
       if (newestFirst.length >= limit) break;
     }
   }
@@ -49,7 +52,7 @@ export function occurrencesForExercise(
       workoutId: w.id,
       completedAt: w.completedAt,
       routineName: w.routineNameSnapshot,
-      sessionMaxWeight: entry.sessionMaxWeight,
+      sessionMaxWeight: entrySessionMaxWeight(entry),
       completed: entry.completed,
     });
   }
@@ -57,7 +60,7 @@ export function occurrencesForExercise(
 }
 
 export function workoutSummary(w: CompletedWorkout): string {
-  const withWeight = w.entries.filter((e) => e.sessionMaxWeight != null).length;
+  const withWeight = w.entries.filter((e) => entryHasWeight(e)).length;
   const done = w.entries.filter((e) => e.completed).length;
   return `${done}/${w.entries.length} exercises · ${withWeight} with weight`;
 }

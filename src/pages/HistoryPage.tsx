@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { ActivityHeatmap } from "@/components/ActivityHeatmap";
 import { CopySummaryButton } from "@/components/CopySummaryButton";
+import { entrySessionMaxWeight } from "@/lib/workoutEntry";
 import { workoutSummary } from "@/lib/workoutStats";
 import { useAppState } from "@/state";
 import type { CompletedWorkout } from "@/types";
@@ -82,26 +83,45 @@ export function HistoryPage() {
               <CopySummaryButton workout={selected} weightUnit={data.weightUnit} />
             </div>
             <ul className="mt-4 space-y-3">
-              {selected.entries.map((e, i) => (
-                <li
-                  key={`${e.exerciseId}-${i}`}
-                  className="flex items-center justify-between gap-3 rounded-xl border border-slate-800/80 bg-slate-900/40 px-3 py-2"
-                >
-                  <div>
-                    <p className="font-medium text-slate-200">{e.displayName}</p>
-                    <p className="text-xs text-slate-500">
-                      {e.targetSets}×{e.targetReps}
-                      {e.completed ? " · done" : ""}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm text-slate-400">Max</p>
-                    <p className="font-mono text-base text-white">
-                      {e.sessionMaxWeight != null ? `${e.sessionMaxWeight} ${data.weightUnit}` : "—"}
-                    </p>
-                  </div>
-                </li>
-              ))}
+              {selected.entries.map((e, i) => {
+                const max = entrySessionMaxWeight(e);
+                return (
+                  <li
+                    key={`${e.exerciseId}-${i}`}
+                    className="rounded-xl border border-slate-800/80 bg-slate-900/40 px-3 py-2"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-medium text-slate-200">{e.displayName}</p>
+                        <p className="text-xs text-slate-500">
+                          Target {e.targetSets}×{e.targetReps}
+                          {e.completed ? " · done" : ""}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-slate-400">Max</p>
+                        <p className="font-mono text-base text-white">
+                          {max != null ? `${max} ${data.weightUnit}` : "—"}
+                        </p>
+                      </div>
+                    </div>
+                    {e.weightGroups.length > 0 && (
+                      <ul className="mt-2 space-y-1 border-t border-slate-800/80 pt-2">
+                        {e.weightGroups.map((g, gi) => (
+                          <li
+                            key={`${g.weight}-${g.sets}-${gi}`}
+                            className="text-xs text-slate-400"
+                          >
+                            {g.sets}x{e.targetReps} · {g.weight}
+                            {data.weightUnit}
+                            {g.rpe != null ? ` · RPE${g.rpe}` : ""}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
             <button
               type="button"

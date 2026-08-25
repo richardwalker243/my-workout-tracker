@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { CopySummaryButton } from "@/components/CopySummaryButton";
+import { WeightGroupsEditor } from "@/components/WeightGroupsEditor";
+import { entrySessionMaxWeight } from "@/lib/workoutEntry";
 import { formatWorkoutShareText } from "@/lib/workoutShareText";
 import { recentMaxWeightsForExercise } from "@/lib/workoutStats";
 import { useAppState } from "@/state";
@@ -69,19 +71,26 @@ export function WorkoutPage() {
               data.workouts,
               active.startedAt,
             );
+            const todayMax = entrySessionMaxWeight(entry);
             return (
               <li
                 key={`${entry.exerciseId}-${index}`}
-                className="rounded-2xl border border-slate-800 bg-slate-900/40 p-4 space-y-3"
+                className="space-y-3 rounded-2xl border border-slate-800 bg-slate-900/40 p-4"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <h2 className="text-base font-semibold text-white">{entry.displayName}</h2>
                     <p className="text-sm text-slate-500">
                       Target {entry.targetSets}×{entry.targetReps}
+                      {todayMax != null ? (
+                        <span className="text-slate-600">
+                          {" "}
+                          · today max {todayMax} {data.weightUnit}
+                        </span>
+                      ) : null}
                     </p>
                   </div>
-                  <label className="flex items-center gap-2 text-sm text-slate-300 shrink-0">
+                  <label className="flex shrink-0 items-center gap-2 text-sm text-slate-300">
                     <input
                       type="checkbox"
                       checked={entry.completed}
@@ -93,52 +102,40 @@ export function WorkoutPage() {
                     Done
                   </label>
                 </div>
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  <div className="rounded-xl bg-slate-950/80 px-3 py-2">
-                    <p className="text-xs text-slate-500">Last maxes ({data.weightUnit})</p>
-                    {lastMaxes.length > 0 ? (
-                      <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-lg font-medium text-slate-200">
-                        {lastMaxes.map((weight, i) => {
-                          const isLatest = i === lastMaxes.length - 1;
-                          return (
-                            <span key={`${weight}-${i}`} className="inline-flex items-baseline gap-x-2">
-                              {i > 0 && (
-                                <span className="font-normal text-slate-600" aria-hidden="true">
-                                  |
-                                </span>
-                              )}
-                              <span className={isLatest ? "font-bold text-white" : undefined}>
-                                {weight}
+
+                <div className="rounded-xl bg-slate-950/80 px-3 py-2">
+                  <p className="text-xs text-slate-500">Last maxes ({data.weightUnit})</p>
+                  {lastMaxes.length > 0 ? (
+                    <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-lg font-medium text-slate-200">
+                      {lastMaxes.map((weight, i) => {
+                        const isLatest = i === lastMaxes.length - 1;
+                        return (
+                          <span
+                            key={`${weight}-${i}`}
+                            className="inline-flex items-baseline gap-x-2"
+                          >
+                            {i > 0 && (
+                              <span className="font-normal text-slate-600" aria-hidden="true">
+                                |
                               </span>
+                            )}
+                            <span className={isLatest ? "font-bold text-white" : undefined}>
+                              {weight}
                             </span>
-                          );
-                        })}
-                      </p>
-                    ) : (
-                      <p className="text-lg font-medium text-slate-200">—</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="mb-1 block text-xs text-slate-500">
-                      Today max ({data.weightUnit})
-                    </label>
-                    <input
-                      type="number"
-                      min={0}
-                      step="0.5"
-                      inputMode="decimal"
-                      placeholder="0"
-                      value={entry.sessionMaxWeight ?? ""}
-                      onChange={(e) => {
-                        const v = e.target.value;
-                        updateActiveEntry(index, {
-                          sessionMaxWeight: v === "" ? null : Number(v),
-                        });
-                      }}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2.5 text-base text-white focus:border-orange-500 focus:outline-none"
-                    />
-                  </div>
+                          </span>
+                        );
+                      })}
+                    </p>
+                  ) : (
+                    <p className="text-lg font-medium text-slate-200">—</p>
+                  )}
                 </div>
+
+                <WeightGroupsEditor
+                  groups={entry.weightGroups}
+                  weightUnit={data.weightUnit}
+                  onChange={(weightGroups) => updateActiveEntry(index, { weightGroups })}
+                />
               </li>
             );
           })}
@@ -175,7 +172,7 @@ export function WorkoutPage() {
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-slate-400">Pick a routine and log max weight as you go.</p>
+      <p className="text-sm text-slate-400">Pick a routine and log weights as you go.</p>
 
       {lastCompleted ? (
         <p className="rounded-xl border border-slate-800/80 bg-slate-900/40 px-3 py-2.5 text-sm text-slate-400">
