@@ -15,12 +15,25 @@ export type Routine = {
   exercises: RoutineExercise[];
 };
 
+/** One or more sets at the same weight, sharing a single optional RPE (1–10). */
+export type SessionWeightGroup = {
+  weight: number;
+  sets: number;
+  rpe: number | null;
+};
+
 export type WorkoutEntry = {
   exerciseId: string;
   displayName: string;
   targetSets: number;
   targetReps: number;
-  sessionMaxWeight: number | null;
+  /** Logged weight groups for this exercise (preferred). */
+  weightGroups: SessionWeightGroup[];
+  /**
+   * Legacy single max from before weight groups. Prefer `weightGroups`;
+   * kept optional so older localStorage payloads still parse.
+   */
+  sessionMaxWeight?: number | null;
   completed: boolean;
 };
 

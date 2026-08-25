@@ -1,3 +1,4 @@
+import { entryHasWeight } from "@/lib/workoutEntry";
 import type { CompletedWorkout, WeightUnit } from "@/types";
 
 function formatCompletedAt(iso: string): string {
@@ -16,8 +17,8 @@ function formatCompletedAt(iso: string): string {
 }
 
 /**
- * Plain-text share summary: done exercises with a recorded weight only.
- * Rows: Exercise | sets×reps | weight unit
+ * Plain-text share summary: one line per weight group on done exercises.
+ * Example: Bench Press | 2x10 | 25kg | RPE7
  */
 export function formatWorkoutShareText(
   workout: CompletedWorkout,
@@ -26,10 +27,12 @@ export function formatWorkoutShareText(
   const lines = [`*Workout completed on ${formatCompletedAt(workout.completedAt)}*`];
 
   for (const entry of workout.entries) {
-    if (!entry.completed || entry.sessionMaxWeight == null) continue;
-    lines.push(
-      `${entry.displayName} | ${entry.targetSets}×${entry.targetReps} | ${entry.sessionMaxWeight} ${weightUnit}`,
-    );
+    if (!entry.completed || !entryHasWeight(entry)) continue;
+    for (const group of entry.weightGroups) {
+      if (!(group.weight > 0) || group.sets < 1) continue;
+      const base = `${entry.displayName} | ${group.sets}x${entry.targetReps} | ${group.weight}${weightUnit}`;
+      lines.push(group.rpe != null ? `${base} | RPE${group.rpe}` : base);
+    }
   }
 
   return lines.join("\n");

@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { newId } from "@/lib/id";
+import { sanitizeWeightGroups } from "@/lib/workoutEntry";
 import { loadAppData, saveAppData } from "@/storage";
 import type {
   ActiveWorkout,
@@ -55,7 +56,7 @@ function reducer(state: AppData, action: Action): AppData {
           action.exerciseNames.get(re.exerciseId) ?? "Unknown exercise",
         targetSets: re.targetSets,
         targetReps: re.targetReps,
-        sessionMaxWeight: null,
+        weightGroups: [],
         completed: false,
       }));
       const active: ActiveWorkout = {
@@ -152,7 +153,10 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       completedAt: new Date().toISOString(),
       routineId: data.activeWorkout.routineId,
       routineNameSnapshot: data.activeWorkout.routineNameSnapshot,
-      entries: data.activeWorkout.entries.map((e) => ({ ...e })),
+      entries: data.activeWorkout.entries.map((e) => ({
+        ...e,
+        weightGroups: sanitizeWeightGroups(e.weightGroups),
+      })),
     };
     dispatch({ type: "finishWorkout", completed });
     return completed;
