@@ -56,12 +56,23 @@ export function WeightGroupsEditor({ groups, weightUnit, onChange }: Props) {
                   min={1}
                   step={1}
                   inputMode="numeric"
-                  value={group.sets}
+                  value={group.sets > 0 ? group.sets : ""}
                   onChange={(e) => {
-                    const n = Number(e.target.value);
-                    updateGroup(index, {
-                      sets: Number.isFinite(n) && n >= 1 ? Math.floor(n) : 1,
-                    });
+                    const v = e.target.value;
+                    if (v === "") {
+                      // Allow a blank field while editing; restore on blur.
+                      updateGroup(index, { sets: 0 });
+                      return;
+                    }
+                    const n = Number(v);
+                    if (Number.isFinite(n) && n >= 0) {
+                      updateGroup(index, { sets: Math.floor(n) });
+                    }
+                  }}
+                  onBlur={() => {
+                    if (!(group.sets >= 1)) {
+                      updateGroup(index, { sets: 1 });
+                    }
                   }}
                   className="w-full rounded-lg border border-slate-700 bg-slate-950 px-2 py-2 text-sm text-white focus:border-orange-500 focus:outline-none"
                 />
